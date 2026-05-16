@@ -1,3 +1,4 @@
+'''Server.py file for the Emotion Detector App'''
 from flask import Flask, render_template, request
 from EmotionDetection.emotion_detection import emotion_detector
 
@@ -7,29 +8,30 @@ app = Flask("Emotion Detector")
 
 @app.route("/")
 def render_index_page():
+    '''Display the index.html pageDisplay the index.html page'''
     return render_template('index.html')
 
 @app.route("/emotionDetector")
 def emote():
+    '''parses the input for the emotion detector'''
     text_to_analyze = request.args.get('textToAnalyze')
     response = emotion_detector(text_to_analyze)
     print(response)
 
     if response['dominant_emotion'] is None:
         return "Invalid text! Please try again!"
-    
-    else:
 
-        strResponse = (
-            "For the given statement, the system response is 'anger': " + str(response['anger']) + ", "
-            "'disgust': " + str(response['disgust']) + ", "
-            "'fear': " + str(response['fear']) + ", "
-            "'joy': " + str(response['joy']) + ", "
-            "and 'sadness': " + str(response['sadness']) + ". "
-            "The dominant emotion is " + response['dominant_emotion'] + "."
-        )
+    str_response = (
+        "For the given statement, the system response is 'anger':"
+        " " + str(response['anger']) + ", "
+        "'disgust': " + str(response['disgust']) + ", "
+        "'fear': " + str(response['fear']) + ", "
+        "'joy': " + str(response['joy']) + ", "
+        "and 'sadness': " + str(response['sadness']) + ". "
+        "The dominant emotion is " + response['dominant_emotion'] + "."
+    )
 
-        return strResponse
+    return str_response
 
 if __name__ == "__main__":
-        app.run(host="0.0.0.0", port=5000)
+    app.run(host="0.0.0.0", port=5000)
