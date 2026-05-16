@@ -11,21 +11,25 @@ def render_index_page():
 
 @app.route("/emotionDetector")
 def emote():
-    print(request.args)
-    print(request.args.get('textToAnalyze'))
     text_to_analyze = request.args.get('textToAnalyze')
     response = emotion_detector(text_to_analyze)
+    print(response)
 
-    strResponse = (
-        "For the given statement, the system response is 'anger': " + str(response['anger']) + ", "
-        "'disgust': " + str(response['disgust']) + ", "
-        "'fear': " + str(response['fear']) + ", "
-        "'joy': " + str(response['joy']) + ", "
-        "and 'sadness': " + str(response['sadness']) + ". "
-        "The dominant emotion is " + response['dominant_emotion'] + "."
-    )
+    if response['dominant_emotion'] is None:
+        return "Invalid text! Please try again!"
+    
+    else:
 
-    return strResponse
+        strResponse = (
+            "For the given statement, the system response is 'anger': " + str(response['anger']) + ", "
+            "'disgust': " + str(response['disgust']) + ", "
+            "'fear': " + str(response['fear']) + ", "
+            "'joy': " + str(response['joy']) + ", "
+            "and 'sadness': " + str(response['sadness']) + ". "
+            "The dominant emotion is " + response['dominant_emotion'] + "."
+        )
+
+        return strResponse
 
 if __name__ == "__main__":
         app.run(host="0.0.0.0", port=5000)
